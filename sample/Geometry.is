@@ -1,0 +1,27 @@
+typespace Geometry {
+    type Point2D {
+        var _dimension0 = NaN;
+        var _dimension1 = NaN;
+
+        with (x, y) {
+            $this._dimension0 = x;
+            $this._dimension1 = y;
+        }
+
+        define distance(/Geometry/Point2D second) {
+            return /Geometry/Point2D.distance($this, second);
+        }
+
+        static define distance(/Geometry/Point2D first, /Geometry/Point2D second) {
+            return Math.sqrt(Math.pow(first._dimension0 - second._dimension0, 2) + Math.pow(first._dimension1 - second._dimension1, 2));
+        }
+
+        define translate(/Geometry/Point2D translateXY) {
+            return /Geometry/Point2D.translate($this, translateXY);
+        }
+
+        static define translate(/Geometry/Point2D point, /Geometry/Point2D translateXY) {
+            return /Geometry/Point2D(point._dimension0 + translateXY._dimension0, point._dimension1 + translateXY._dimension1);
+        }
+    }
+}
