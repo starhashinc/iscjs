@@ -1,0 +1,11 @@
+{
+    "title": "Transpiling to JS",
+    "content": [{
+        "type": "paragraph",
+        "text": "Work in progress..."
+    }], 
+    "footer": [{
+        "type": "paragraph",
+        "text": "<span class='floatRight transparentFloatShadow'><a class='contentLink' href='#!introduction'>Previous</a> Introduction &bullet; Transpiled Code <a class='contentLink' href='#!transpiled-code'>Next</a></span>"
+    }]
+}

@@ -1,0 +1,55 @@
+{
+    "title": "Introduction",
+    "content": [{
+        "type": "paragraph",
+        "text": "ISCJS is a transpiler for InfinityScript. All JavaScript compatible features of Infinity can now be transpiled using the iscjs module."
+    }, {
+        "type": "paragraph",
+        "text": "Infinity is a new language and platform being developed at starhash Studios. The platform provides an independant runtime environment for an advanced code execution. As a necessity a new programming language needed to be devised by the name Infinity. The programming language works in a different manner for different scenarios. If used within the compiled code runtime environment, it functions as a compiled programming language, while if used in an outside environment (such as in ISCJS) it functions as a scripting language, hence the name InfinityScript."
+    }, {
+        "type": "paragraph",
+        "text": "If you are not yet familiar with Infinity or InfinityScript head $url:link0[here].",
+        "links": {
+            "content": "local",
+            "link0": "#!infinity"
+        }
+    }, {
+        "type": "paragraph",
+        "text": "ISCJS brings the following features to the transpiled JavaScript programs -"
+    }, {
+        "type": "list",
+        "items": [
+            "Object-Oriented and modular approach to JavaScript programs <a class='contentJumper' href='#!introduction/object-oriented'>jump</a>",
+            "Inheritance <a class='contentJumper' href='#!introduction/inheritance'>jump</a>",
+            "Static and Dynamic data-members and functions",
+            "Constructors for Object-Oriented types",
+            "Enums for typed constants"
+        ]
+    }, {
+        "type": "paragraph",
+        "text": "<h5 id='object-oriented'>Object-Oriented and modular approach</h5>"
+    }, {
+        "type": "paragraph",
+        "text": "Infinity follows an object-oriented approach for programming. Entities can exist in the form of <i>types</i>, <i>typespaces</i>, enums, classes, structures, interfaces, functions, variables and many more. Infinity has a clear distinction between the aforementioned entities and using properly handled JavaScript code generation these entities can be programmed to exist within the web runtime."
+    }, {
+        "type": "paragraph",
+        "text": "Currently, ISCJS can handle only typespaces <a class='contentJumper' href='#!introduction/typespaces'>jump</a>, types <a class='contentJumper' href='#!introduction/types'>jump</a>, functions and variables <a class='contentJumper' href='#!introduction/functions-variables'>jump</a>. Here's how these different entities can be written in InfinityScript along with their JavaScript equivalents -"
+    }, {
+        "type": "list",
+        "items": [
+            "<div class='h6' id='typespaces'>Typespaces</div>&br;A typespace can hold any number of entities, in short it acts as a named enclosure for different entities.<div id='object-oriented-typespaces' class='codepanel'><div class='code dividerRight'><h6>.is</h6><pre id='typespace-code-0'><code class='infinityscript'>typespace SampleTypespace {&br;&br;}</code.</pre></div><div class='code dividerLeft'><h6>.js</h6><pre id='typespace-code-1'><code class='javascript'>var Geometry = (function () {&br;&tb;var $this = {};&br;&tb;return $this;&br;})();</code></pre></div></div>",
+            "<div class='h6' id='types'>Types</div>&br;A typespace can hold any number of entities, in short it acts as a named enclosure for different entities.<div id='object-oriented-typespaces' class='codepanel'><div class='code dividerRight'><h6>.is</h6><pre id='type-code-0'><code class='infinityscript'>typespace SampleTypespace {&br;&tb;type SampleType {&br;&tb;&tb;var sampleMember;&br;&br;&tb;&tb;with (value) {&br;&tb;&tb;&tb;$this.sampleMember = value;&br;&tb;&tb;}&br;&tb;}&br;}</code></pre></div><div class='code dividerLeft'><h6>.js</h6><pre id='type-code-1'><code class='javascript'>var $this = {};&br;var SampleTypespace = (function () {&br;&tb;var $this = {};&br;&tb;$this.SampleType = function () {&br;&tb;&tb;var $this = { $constructors: [] };&br;&tb;&tb;$this.sampleMember = undefined;&br;&tb;&tb;$this.$constructors.push(function (value) {&br;&tb;&tb;&tb;$this.sampleMember = value;&br;&tb;&tb;});&br;&br;&tb;&tb;var $arguments = arguments, $constructed = false; $this.$constructors.reverse();&br;&tb;&tb;$this.$constructors.forEach(function ($constructor) {&br;&tb;&tb;&tb;if ($constructor.length === $arguments.length && !$constructed) {&br;&tb;&tb;&tb;&tb;$constructor.apply($this, $arguments); $constructed = true;&br;&tb;&tb;&tb;}&br;&tb;&tb;});&br;&tb;&tb;return $this;&br;&tb;};&br;&br;&tb;return $this;&br;})();&br;$this.SampleTypespace = SampleTypespace;</code></pre></div></div>&br;It can be seen that the generated JavaScript code creates a callable function object that can be called along with parameters (if any). The generated code consists of the logic responsible for loading constructors for a type and calling them. In this case, if one value is passed, the constructor declared here will be called. If there is no default constructor declared, it won't cause any problems. There can be more than one constructor declared, but it should be kept in mind that they should be unique in their number of arguments.<p>It can also be seen that any variable declared within the type is also created within the generated function. If there is no value assigned, the created variable will take the value of <i>undefined</i></p>",
+            "<div class='h6' id='functions-variables'>Functions and Variables</div>&br;A function as in any programming language performs some action based on the input it is provided. Static functions can be created within types and can also be expressed as lambdas.<p>Variables can also be declared as static within the type. However, preserving the Infinity style for declarations, the Infinity style type-path can be used as a data type name (this will be ignored by the transpiler and replaced by 'var' regardless).</p><div id='object-oriented-functions-variables' class='codepanel'><div class='code dividerRight'><h6>.is</h6><pre id='functions-variables-code-0'><code class='infinityscript'>define function0(param0, param1) {&br;&tb;action(param0, param1);&br;}&br;&br;typespace SampleTypespace {&br;&tb;var function1 = define (param) {&br;&tb;&tb;toDo(param);&br;&tb;};&br;&br;&tb;type SampleType {&br;&tb;&tb;var sampleMember;&br;&br;&tb;&tb;static var sampleStaticMember = 'Static Member';&br;&br;&tb;&tb;with () {&br;&tb;&tb;&tb;$this.sampleMember = 100;&br;&tb;&tb;}&br;&br;&tb;&tb;define function2 (param2, param3, param4) {&br;&tb;&tb;&tb;return dummyMethod(param2(param3), param4);&br;&tb;&tb;}&br;&br;&tb;&tb;static define sampleStaticFunction() {&br;&tb;&tb;&tb;return 'I am Static';&br;&tb;&tb;}&br;&tb;}&br;}&br;</code></pre></div><div class='code dividerLeft'><h6>.js</h6><pre id='functions-variables-code-1'><code class='javascript'>var $this = {};&br;&br;$this.function0 = function (param0, param1) {&br;&tb;action(param0, param1);&br;};&br;var SampleTypespace = (function () {&br;&tb;var $this = {};&br;&tb;$this.function1 = function (param) {&br;&tb;&tb;toDo(param);&br;&tb;};&br;&tb;$this.SampleType = function () {&br;&tb;&tb;var $this = { $constructors: [] };&br;&tb;&tb;$this.sampleMember = undefined;&br;&tb;&tb;$this.$constructors.push(function () {&br;&tb;&tb;&tb;$this.sampleMember = 100;&br;&tb;&tb;});&br;&br;&tb;&tb;$this.function2 = function (param2, param3, param4) {&br;&tb;&tb;&tb;return dummyMethod(param2(param3), param4);&br;&tb;&tb;};&br;&br;&tb;&tb;var $arguments = arguments, $constructed = false; $this.$constructors.reverse();&br;&tb;&tb;$this.$constructors.forEach(function ($constructor) {&br;&tb;&tb;&tb;if ($constructor.length === $arguments.length && !$constructed) {&br;&tb;&tb;&tb;&tb;$constructor.apply($this, $arguments); $constructed = true;&br;&tb;&tb;&tb;}&br;&tb;&tb;});&br;&tb;&tb;return $this;&br;&tb;};&br;&br;&tb;$this.SampleType.sampleStaticFunction = function () {&br;&tb;&tb;return 'I am Static';&br;&tb;};&br;&br;&tb;$this.SampleType.sampleStaticMember = 'Static Member';&br;&br;&tb;return $this;&br;})();&br;$this.SampleTypespace = SampleTypespace;&br;&br;</code></pre></div></div>"
+        ]
+    }, {
+        "type": "paragraph",
+        "text": "<h5 id='inheritance'>Inheritance</h5>"
+    }, {
+        "type": "paragraph",
+        "text": "One of the most important features of an object-oriented programming language, ISCJS currently handles only single inheritance. Transpilation support for multiple inheritance is under development."
+    }], 
+    "footer": [{
+        "type": "paragraph",
+        "text": "<span class='floatRight transparentFloatShadow'>Transpiling to JS <a class='contentLink' href='#!transpiling'>Next</a></span>"
+    }]
+}

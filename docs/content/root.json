@@ -1,0 +1,35 @@
+{
+    "title": "<div class='h6altsel'>the InfinityScript to JavaScript Transpiler</div>",
+    "content": [{
+        "type": "paragraph",
+        "text": "Welcome to the home page of ISCJS!"
+    }, {
+        "type": "paragraph",
+        "text": "Click $url:link0[here] for a quick introduction to ISCJS and what it does.",
+        "links": {
+            "link0": "#!introduction"
+        }
+    }, {
+        "type": "paragraph",
+        "text": "<h5>Quick Guide</h5>"
+    }, {
+        "type": "paragraph",
+        "text": "<p class='shrink'>To transpile a single file run the command<div class='code'>iscjs <i>&lt;file-name&gt;</i></div>"
+    }, {
+        "type": "paragraph",
+        "text": "<br /><p class='shrink'>To transpile all files present within a directory run the command<div class='code'>iscjs <i>&lt;directory-name&gt;</i></div></p>"
+    }, {
+        "type": "paragraph",
+        "text": "<br /><p class='shrink'>Running the following command will transpile all InfinityScript files present in the current working directory.<div class='code inline'>iscjs .</i></div></p>"
+    }, {
+        "type": "paragraph",
+        "text": "<br /><br />Click on the Download button at the bottom right corner of this page to get the latest release."
+    }], 
+    "footer": [{
+        "type": "paragraph",
+        "text": "<span class='floatRight transparentFloatShadow'>Download latest Release <a class='downloadButton' id='latestReleaseInfo'>?</a></span>"
+    }, {
+        "type": "script",
+        "code": "<script>setTimeout(function() { getLatestReleaseInfo('latestReleaseInfo'); }, 100);</script>"
+    }]
+}

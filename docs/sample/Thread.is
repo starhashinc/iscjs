@@ -1,0 +1,55 @@
+enum ThreadState {
+    Starting,
+    Waiting,
+    Running,
+    Stopped
+}
+
+type Thread {
+    with (runCallback) {
+        $this._onRun = runCallback;
+    }
+
+    with (runCallback, parameterList) {
+        if (runCallback.arguments.length !== parameterList.length) {
+            $this._state = ThreadState.Stopped;
+            return;
+        }
+        $this._onRun = runCallback;
+        $this._parameterList = parameterList;
+    }
+
+    define run() {
+        if ($this._state === ThreadState.Running || $this._state === ThreadState.Starting) {
+            $this._onRun();
+            $this.run();
+        } else if ($this._state === ThreadState.Waiting) {
+            setTimeout(define () {
+                $this._state = ThreadState.Running;
+                $this.run();
+            }, $this._waitTimeout);
+        } else if ($this._state === ThreadState.Stopped) {
+            $this.stop();
+        }
+    }
+
+    define start() {
+        $this._state = ThreadState.Starting;
+        if ($this._onStart !== undefined) {
+            $this._onStart();
+        }
+        $this.run();
+    }
+
+    define stop() {
+        $this._state = ThreadState.Stopped;
+        if ($this._onStop !== undefined) {
+            $this._onStop();
+        }
+    }
+
+    define wait(milliseconds) {
+        $this._state = ThreadState.Waiting;
+        $this._waitTimeout = milliseconds;
+    }
+}

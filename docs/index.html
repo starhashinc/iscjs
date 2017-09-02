@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+    <head>
+        <link rel="shortcut icon" type="image/png" href="images/infinity-logo-blue-32-round.png" />
+        <link rel="stylesheet" href="styles/index.css" />
+        <link rel="stylesheet" href="styles/progress.css" />
+        <link rel="stylesheet" href="styles/transitions.css" />
+        <link rel="stylesheet" href="scripts/highlight.js/styles/vs.css">
+        <script src="scripts/jquery.js"></script>
+        <script src="scripts/highlight.js/highlight.pack.js"></script>
+        <script src="scripts/navigo.js"></script>
+        <script src="scripts/angular.js"></script>
+        <title>Home - iscjs</title>
+        <script src="scripts/index.js"></script>
+    </head>
+    <body ng-app="iscjsApp">
+        <div class="container" ng-controller="mainController">
+            <script src="scripts/mainController.js"></script>
+            <div class="sidebar">
+                <a class="button background-1s"
+                    ng-class="{ 'button-selected': selectedContent == '' }"
+                    ng-href="#!">
+                    <h1 class="pageTitle">iscjs</h1>
+                </a>
+                
+                <div class="index">
+                    <a class="button background-1s"
+                        ng-repeat="(id, content) in index" ng-if="id.length > 0"
+                        ng-class="{ 'button-selected': selectedContent == id }"
+                        ng-href="#!{{id}}">
+                        {{content.title}}
+                    </a>
+                </div>
+                <div class="footer" ng-init="overInfinity = false;"
+                    ng-style="{
+                        'height': (overInfinity) ? '88px' : '',
+                        'border-top': (overInfinity) ? '1px solid #dddddd' : '',
+                        'filter': (overInfinity) ? 'grayscale(0%)' : 'grayscale(75%)',
+                        'background-color': (overInfinity) ? '#fafafa' : 'transparent'
+                    }"
+                    ng-mouseleave="overInfinity = false;">
+                    <div class="infinityTooltip" ng-style="{ 'opacity': (overInfinity) ? 1.0 : 0.0 }">This product is a part of the <b>Infinity Framework</b> developed at <i>starhash Studios</i>.</div>
+                    <div class="inline" ng-mouseover="overInfinity = true;">
+                        <img src="images/part-of-infinity-framework-badge-16.png" alt="This product is a part of the Infinity Framework." />
+                    </div>
+                    <div class="floatRight sidebarFooterCopyright">&copy; starhash Studios</div>
+                </div>
+            </div>
+            <div class="contentpanel">
+                <div class="top" ng-class="{ 'top-root': selectedContent == '' }">
+                    <h2 ng-show="isValidKey('title', content)" ng-bind-html="formatText(content.title)"></h2>
+                    <div class="progress" ng-show="loading">
+                        <div class="indeterminate"></div>
+                    </div>
+                </div>
+                <div class="content">
+                    <div ng-repeat="object in content.content">
+                        <ng-switch on="object.type">
+                            <p ng-switch-when="paragraph" ng-bind-html="formatParagraph(object)"></p>
+                            <ul ng-switch-when="list">
+                                <li ng-repeat="item in object.items" ng-bind-html="formatText(item)"></li>
+                            </ul>
+                        </ng-switch>
+                    </div>
+                    <div class="footer" ng-if="isValidKey('footer', content)">
+                        <ng-switch on="object.type" ng-repeat="object in content.footer">
+                            <div ng-switch-when="paragraph" ng-bind-html="formatParagraph(object)"></div>
+                            <div ng-switch-when="script" html="{{object.code}}"></div>
+                        </ng-switch>
+                    </div>
+                    <br />
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

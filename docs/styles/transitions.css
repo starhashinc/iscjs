@@ -1,0 +1,5 @@
+.background-1s {
+    -webkit-transition: background .1s ease-in-out;
+    -moz-transition: background .1s ease-in-out;
+    transition: background .1s ease-in-out;
+}
