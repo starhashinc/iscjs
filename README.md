@@ -19,4 +19,4 @@ Running the following command will transpile all InfinityScript files present in
 
 ```iscjs .```
 
-For more information you can go [here](https://starhashinc.github.io/iscjs)
+For more information you can go [here](https://starhashstudios.github.io/iscjs)
