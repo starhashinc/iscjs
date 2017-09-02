@@ -1,9 +1,9 @@
 # iscjs
-A reliable InfinityScript transpiler for your JavaScript projects
+A reliable InfinityScript transpiler for your JavaScript projects.
 
-Welcome to the home page of ISCJS!
+ISCJS converts code written in InfinityScript to JavaScript equivalent.
 
-Click here for a quick introduction to ISCJS and what it does.
+You can use InfinityScript for an object-oriented approach in your JavaScript code.
 
 ### Quick Guide
 
