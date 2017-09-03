@@ -1,0 +1,42 @@
+type Point {
+    list _dimensions = [];
+
+    define translate() {
+        for (int i = 0; i < _dimensions.length; i++) {
+            this._dimensions[i] += arguments[i];
+        }
+    }    
+}
+
+type Point2D : Point {
+    with (x, y) {
+        this._dimensions.push(x);
+        this._dimensions.push(y);
+    }
+
+    define x() { return this._dimensions[0]; }
+    define y() { return this._dimensions[1]; }
+}
+
+type Polygon2D {
+    list _vertices = [];
+
+    with () {
+        for (int i = 0; i < arguments.length; i++) {
+            this._vertices.push(arguments[i]);
+        }
+    }
+
+    define area() {
+        double _area = 0.0;
+        list _vertices = this._vertices;
+        for (int i = 0; i < _vertices.length; i++) {
+            _area += Math.abs(0.5 * ((_vertices[i].x() * _vertices[((i + 1) % _vertices.length)].y()) - (_vertices[i].y() * _vertices[((i + 1) % _vertices.length)].x())));
+        }
+        return _area;
+    }
+}
+
+Polygon2D polygon = Polygon2D(Point2D(0, 0), Point2D(0, 2), Point2D(2, 0), Point2D(2, 2));
+double area = polygon.area();
+console.log(area);

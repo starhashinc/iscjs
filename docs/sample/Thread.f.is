@@ -21,9 +21,16 @@ type Thread {
 
     define run() {
         if ($this._state === ThreadState.Running || $this._state === ThreadState.Starting) {
-            $this._onRun();
-            $this.run();
+            if ($this._onRun !== undefined) {
+                $this._onRun();
+            }
+            setTimeout(define () {
+                $this.run();
+            }, 0);
         } else if ($this._state === ThreadState.Waiting) {
+            if ($this._onWait() !== undefined) {
+                $this._onWait();
+            }
             setTimeout(define () {
                 $this._state = ThreadState.Running;
                 $this.run();
@@ -41,15 +48,30 @@ type Thread {
         $this.run();
     }
 
-    define stop() {
+    define stop(onStop) {
         $this._state = ThreadState.Stopped;
+        $this._onStop = onStop;
         if ($this._onStop !== undefined) {
             $this._onStop();
         }
     }
 
-    define wait(milliseconds) {
+    define wait(milliseconds, onWait) {
         $this._state = ThreadState.Waiting;
         $this._waitTimeout = milliseconds;
+        if (onWait !== undefined) {
+            $this._onWait = onWait;
+        }
     }
 }
+
+int count = 0;
+/Thread printOK = Thread(define () {
+    printOK.stop(define () {
+        console.log("Stopped");
+    });
+});
+printOK.start();
+printOK.wait(5000, define () {
+    console.log("Waiting");
+});

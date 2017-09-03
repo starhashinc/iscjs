@@ -1,0 +1,33 @@
+type Nameable {
+    string _name;
+    define name() { return _name; }
+}
+
+type Rotatable {
+    double _rotation;
+    define rotation() { return _rotation; }
+    define rotate();
+}
+
+type Object2D {
+    double _originX;
+    double _originY;
+
+    with (ox, oy) {
+        this._originX = ox;
+        this._originY = oy;
+    }
+
+    define translateOrigin(dx, dy) {
+        this._originX += dx;
+        this._originY += dy;
+    }
+}
+
+type Shape : Object2D < Nameable, Rotatable {
+    list _vertices = [];
+    
+}
+
+var t = Shape();
+console.log(t);
