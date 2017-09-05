@@ -1,0 +1,77 @@
+{
+    "title": "Inheritance",
+    "content": [
+        {
+            "type": "paragraph",
+            "text": "ISCJS supports <i>single</i> <b>base</b>-type inheritance and <i>multiple</i> <b>mixin</b>-type feature inheritance.<br /><i>Transpilation support for multiple base-type inheritance is under development.</i>"
+        },
+        {
+            "type": "paragraph",
+            "text": "<h5>A Simple Example</h5>"
+        },
+        {
+            "type": "paragraph",
+            "text": "Here is a fairly simple example which builds a quite simple inheritance scenario."
+        },
+        {
+            "type": "paragraph",
+            "text": "<i><b>Point</b></i> is a type representing a multi-dimensional point. (It also has a translate method which translates the multi-dimensional point by a multi-dimensional offset passed as arguments.<i>Just for fun.</i>)"
+        },
+        {
+            "type": "paragraph",
+            "text": "<i><b>Point2D</b></i> is a type representing a 2-dimensional point and it inherits from the previously declared Point type. As a result the two members <pre>_dimensions</pre> and <pre>translate()</pre> will be inherited by the Point2D type.<div class='note'>Please note that the declared entities are not classes, and are hence loosely typed. This means that all member access expressions and method calls done through the objects of such a type are not checked. <i>Future releases will include this feature as classes which will be strict-typed.</i></div>Point2D also has two member access functions, <pre>x()</pre> and <pre>y()</pre>."
+        },
+        {
+            "type": "paragraph",
+            "text": "<i><b>Polygon2D</b></i> is a type representing a 2-dimensional polygon. It contains an array type member <pre>_vertices</pre> which holds all the vertices of the polygon object created from the type definition. It has a constructor which has no defined argument list, so by JavaScript's default the argument list will be sent via the <pre>arguments</pre> keyword. The <pre>area()</pre> method calculates the area of the polygon using the determinant form for a polygon of n-vertices."
+        },
+        {
+            "type": "paragraph",
+            "text": "<div class='note'>You can run the transpiled JavaScript code in your browser by clicking on the <b>Run</b> button.</div>"
+        },
+        {
+            "type": "codetab",
+            "is": {
+                "id": "simple-inheritance-is",
+                "title": "Polygon.is",
+                "url": "samples/Polygon.f.is"
+            },
+            "js": {
+                "id": "simple-inheritance-js",
+                "title": "Polygon.js",
+                "url": "samples/Polygon.js"
+            }
+        },
+        {
+            "type": "paragraph",
+            "text": "<h5>Multiple inheritance and Mixin type inheritance</h5>"
+        },
+        {
+            "type": "paragraph",
+            "text": "In this example the types <pre>Nameable</pre>, <pre>Rotatable</pre> and <pre>Translatable</pre> are declared as normal types but are inherited as mix-in types by <pre>Point</pre> followed by <pre>Point2D</pre> (<i>since it inherits from <pre>Point</pre></i>) followed by <pre>Polygon</pre>. It can be seen that <pre>Polygon</pre> inherits from its sole base class <pre>OriginReferenced</pre>. Polygon defines its own data member <pre>_vertices</pre> and its own two methods <pre>area()</pre> and <pre>centroid()</pre> along with the initialization constructor. Since it inherits from multiple mixin-types it defines the incomplete methods as <pre>rotate()</pre> and <pre>translate()</pre>."
+        },
+        {
+            "type": "paragraph",
+            "text": "<div class='note'>You can run the transpiled JavaScript code in your browser by clicking on the <b>Run</b> button.</div>"
+        },
+        {
+            "type": "codetab",
+            "is": {
+                "id": "multiple-inheritance-is",
+                "title": "MultipleInheritance.is",
+                "url": "samples/MultipleInheritance.f.is"
+            },
+            "js": {
+                "id": "multiple-inheritance-js",
+                "title": "MultipleInheritance.js",
+                "url": "samples/MultipleInheritance.js"
+            }
+        }
+    ],
+    "footer": [
+        {
+            "type": "paragraph",
+            "text": "<a class='contentLink transparentFloatShadow' href='#!samples/inheritance'>Samples</a>"
+        }
+    ]
+}

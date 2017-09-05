@@ -8,7 +8,10 @@
         <link rel="stylesheet" href="scripts/highlight.js/styles/vs.css">
         <script src="scripts/jquery.js"></script>
         <script src="scripts/highlight.js/highlight.pack.js"></script>
+        <script src="scripts/highlight.js/highlight-js-line-numbers.min.js"></script>
         <script src="scripts/navigo.js"></script>
+        <script src="scripts/mark.js"></script>
+        <script src="scripts/download.js"></script>
         <script src="scripts/angular.js"></script>
         <title>Home - iscjs</title>
         <script src="scripts/index.js"></script>
@@ -22,14 +25,31 @@
                     ng-href="#!">
                     <h1 class="pageTitle">iscjs</h1>
                 </a>
-                
+                <div class="searchbox">
+                    <input type="text" class="searchinput"
+                        ng-model="search" ng-init="search = ''; findInDocument = false;"
+                        ng-change="mark($event);"
+                        placeholder="{{(findInDocument == true) ? 'Search in Document' : 'Search'}}"
+                        ng-class="{ 'searchcontent-input': findInDocument == true }" id="searchinput" />
+                    <span class="searchbutton" ng-click="searchClick();">
+                        <svg ng-if="findInDocument == false" viewBox="0 0 24 24" width="12" height="12">
+                            <path d="M24 21.172l-5.66-5.66C19.387 13.932 20 12.038 20 10c0-5.523-4.477-10-10-10S0 4.477 0 10s4.477 10 10 10c2.038 0 3.932-.613 5.512-1.66l5.66 5.66L24 21.172zM4 10c0-3.31 2.69-6 6-6s6 2.69 6 6-2.69 6-6 6-6-2.69-6-6z"></path>
+                        </svg>
+                        <svg ng-if="findInDocument == true" width="16" height="16" viewBox="0 0 24 24" style="margin-bottom: -2px; margin-left: -2px;" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd">
+                            <path d="M17.825 24h-15.825v-24h10.189c3.162 0 9.811 7.223 9.811 9.614v10.071l-2-2v-7.228c0-4.107-6-2.457-6-2.457s1.517-6-2.638-6h-7.362v20h11.825l2 2zm-2.026-4.858c-.799.542-1.762.858-2.799.858-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5c0 1-.294 1.932-.801 2.714l4.801 4.872-1.414 1.414-4.787-4.858zm-2.799-7.142c1.656 0 3 1.344 3 3s-1.344 3-3 3-3-1.344-3-3 1.344-3 3-3z"/>
+                        </svg>
+                    </span>
+                </div>
                 <div class="index">
-                    <a class="button background-1s"
-                        ng-repeat="(id, content) in index" ng-if="id.length > 0"
-                        ng-class="{ 'button-selected': selectedContent == id }"
-                        ng-href="#!{{id}}">
-                        {{content.title}}
-                    </a>
+                    <div ng-repeat="(id, icontent) in index | search:this">
+                        <a class="button background-1s"
+                            ng-if="id.length > 0"
+                            ng-class="{ 'button-selected': selectedContent == id }"
+                            ng-style="{ 'padding-left': (18 + resolveId(id).level * 8) + 'px' }"
+                            ng-href="#!{{id}}">
+                            {{icontent.title}}
+                        </a>
+                    </div>
                 </div>
                 <div class="footer" ng-init="overInfinity = false;"
                     ng-style="{
@@ -53,22 +73,41 @@
                         <div class="indeterminate"></div>
                     </div>
                 </div>
-                <div class="content">
+                <div class="content" id="content" contextmenu="contentContextMenu">
                     <div ng-repeat="object in content.content">
                         <ng-switch on="object.type">
                             <p ng-switch-when="paragraph" ng-bind-html="formatParagraph(object)"></p>
+                            <div class='code' ng-switch-when="code" ng-bind-html="formatCode(object)"></div>
+                            <div ng-switch-when="codetab" ng-init="showIS = true;">
+                                <div class="codetabButton" ng-class="{ 'codetabButtonSelected': showIS == true }" ng-click="showIS = true;">IS</div>
+                                <div class="codetabButton" ng-class="{ 'codetabButtonSelected': showIS == false }" ng-click="showIS = false;">JS</div>
+                                <div class="codeRunButton" ng-click="run(object.js.id, $scope)">Run</div>
+                                <div class="codetabButton" ng-class="{ 'codetabButtonSelected': showIS == undefined }" ng-click="showIS = undefined;">Console</div>
+                                <div class="code">
+                                    <div ng-show="showIS == true" ng-bind-html="formatCode(object.is)"></div>
+                                    <div ng-show="showIS == false" ng-bind-html="formatCode(object.js)"></div>
+                                    <div ng-show="showIS == undefined" ng-bind-html="consoleOutput" class="consoleOutput"></div>
+                                </div>
+                            </div>
                             <ul ng-switch-when="list">
                                 <li ng-repeat="item in object.items" ng-bind-html="formatText(item)"></li>
                             </ul>
                         </ng-switch>
                     </div>
-                    <div class="footer" ng-if="isValidKey('footer', content)">
-                        <ng-switch on="object.type" ng-repeat="object in content.footer">
-                            <div ng-switch-when="paragraph" ng-bind-html="formatParagraph(object)"></div>
-                            <div ng-switch-when="script" html="{{object.code}}"></div>
-                        </ng-switch>
+                    <div class="footer">
+                        <span class='floatRight transparentFloatShadow' ng-show="nav.hasPrevious || nav.hasNext">
+                            <span ng-if="nav.hasPrevious"><a class='contentLink' ng-href='#!{{nav.previousUrl}}'>Previous</a> {{cleanHTML(nav.previous.title)}}</span>
+                            <span ng-if="nav.hasPrevious && nav.hasNext">&nbsp;&bullet;&nbsp;</span>
+                            <span ng-if="nav.hasNext">{{cleanHTML(nav.next.title)}} <a class='contentLink' ng-href='#!{{nav.nextUrl}}'>Next</a></span>
+                        </span>
+                        <div ng-if="isValidKey('footer', content)">
+                            <ng-switch on="object.type" ng-repeat="object in content.footer">
+                                <div ng-switch-when="paragraph" ng-bind-html="formatParagraph(object)"></div>
+                                <div ng-switch-when="script" html="{{object.code}}"></div>
+                            </ng-switch>
+                        </div>
                     </div>
-                    <br />
+                    <div style="padding: 32px; display: inline;"><br /></div>
                 </div>
             </div>
         </div>

@@ -1,0 +1,14 @@
+{
+    "title": "Samples",
+    "content": [{
+        "type": "paragraph",
+        "text": ""
+    }], 
+    "footer": [{
+        "type":"paragraph",
+        "text":"<a class='downloadButton transparentFloatShadow' href='#!samples?download'>Download</a>"
+    }],
+    "actions": {
+        "download": "download('https://minhaskamal.github.io/DownGit/#/home?url=https://github.com/starhashstudios/iscjs/tree/master/docs/sample', 'samples.zip', 'application/zip, application/octet-stream');"
+    }
+}

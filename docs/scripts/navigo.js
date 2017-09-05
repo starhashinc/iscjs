@@ -332,11 +332,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	        hooks: m.route.hooks,
 	        params: m.params,
 	        name: m.route.name
-	      };
+				};
+				var $this = this._lastRouteResolved;
 	      handler = m.route.handler;
 	      manageHooks(function () {
 	        manageHooks(function () {
-	          m.route.route instanceof RegExp ? handler.apply(undefined, _toConsumableArray(m.match.slice(1, m.match.length))) : handler(m.params, GETParameters);
+	          m.route.route instanceof RegExp ? handler.apply($this, _toConsumableArray(m.match.slice(1, m.match.length))) : handler(m.params, GETParameters);
 	        }, m.route.hooks, m.params, _this2._genericHooks);
 	      }, this._genericHooks, m.params);
 	      return m;
