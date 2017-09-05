@@ -1,0 +1,119 @@
+type Nameable {
+    string _name;
+    define name() { return _name; }
+}
+
+type Rotatable {
+    define rotate(radians, origin);
+}
+
+type Translatable {
+    define translate(dx, dy);
+}
+
+type Point < Rotatable, Translatable {
+    list _dimensions = [];
+}
+
+type Point2D : Point {
+    with (x, y) {
+        this._dimensions.push(x);
+        this._dimensions.push(y);
+    }
+
+    define x() { return this._dimensions[0]; }
+    define y() { return this._dimensions[1]; }
+
+    define rotate(radians, origin) {
+        double x = this._dimensions[0] - origin.x();
+        double y = this._dimensions[1] - origin.y();
+        this._dimensions[0] = (x * Math.cos(radians)) - (y * Math.sin(radians)) + origin.x();
+        this._dimensions[1] = (x * Math.sin(radians)) + (y * Math.cos(radians)) + origin.y();
+    }
+
+    define translate(dx, dy) {
+        this._dimensions[0] += dx;
+        this._dimensions[1] += dy;
+    }
+
+    define toString() {
+        return "(" + this._dimensions[0] + ", " + this._dimensions[1] + ")";
+    }
+}
+
+type OriginReferenced {
+    Point2D _origin = Point2D(0, 0);
+
+    with (ox, oy) {
+        this._origin = Point2D(ox, oy);
+    }
+
+    define origin() { return this._origin; }
+
+    define translateOrigin(dx, dy) {
+        this._origin.translate(dx, dy);
+    }
+}
+
+type Polygon : OriginReferenced < Nameable, Rotatable, Translatable {
+    list _vertices = [];
+
+    with () {
+        this._name = "Polygon";
+        for (int i = 0; i < arguments.length; i++) {
+            this._vertices.push(arguments[i]);
+        }
+    }
+
+    define area() {
+        double _area = 0.0;
+        list _vertices = this._vertices;
+        for (int i = 0; i < _vertices.length; i++) {
+            _area += Math.abs(0.5 * ((_vertices[i].x() * _vertices[((i + 1) % _vertices.length)].y()) - (_vertices[i].y() * _vertices[((i + 1) % _vertices.length)].x())));
+        }
+        return _area;
+    }
+
+    define centroid() {
+        double cx = 0.0;
+        double cy = 0.0;
+        double areax6 = 6 * this.area();
+        for (int i = 0; i < this._vertices.length; i++) {
+            cx += (this._vertices[i].x() + this._vertices[(i + 1) % this._vertices.length].x()) 
+                * (
+                    (this._vertices[i].x() * this._vertices[(i + 1) % this._vertices.length].y())
+                    -
+                    (this._vertices[(i + 1) % this._vertices.length].x() * this._vertices[i].y())
+                );
+            cy += (this._vertices[i].y() + this._vertices[(i + 1) % this._vertices.length].y()) 
+                * (
+                    (this._vertices[i].x() * this._vertices[(i + 1) % this._vertices.length].y())
+                    -
+                    (this._vertices[(i + 1) % this._vertices.length].x() * this._vertices[i].y())
+                );
+        }
+        return Point2D(cx / areax6, cy / areax6);
+    }
+
+    define rotate(radians) {
+        for (int i = 0; i < this._vertices.length; i++) {
+            this._vertices[i].rotate(radians, this._origin);
+        }
+    }
+
+    define translate(dx, dy) {
+        for (int i = 0; i < this._vertices.length; i++) {
+            this._vertices[i].translate(dx, dy);
+        }
+    }
+}
+
+Polygon triangle = Polygon(Point2D(0, 4), Point2D(-2, 0), Point2D(2, 0));
+console.log(triangle.area());
+var centroid = triangle.centroid();
+console.log(centroid.toString());
+triangle.translate(0, -2);
+triangle.rotate(Math.PI / 2.0);
+console.log(triangle.area());
+var centroid = triangle.centroid();
+console.log(centroid.toString());
